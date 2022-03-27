@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "173092173017",
+    "project_id": "destini-go",
+    "storage_bucket": "destini-go.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:173092173017:android:7b62ee51caa0408afabac8",
+        "android_client_info": {
+          "package_name": "com.destinigo.admin.destinigo_admin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "173092173017-2ha1di4r720nq17jl48hth9p4j4cisrk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDBj1KOTFfTTZOZ4ZlNHfPO2ZDFlZz_51g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "173092173017-2ha1di4r720nq17jl48hth9p4j4cisrk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -8,6 +8,7 @@ import 'callscreen.dart';
 import 'mailnow.dart';
 import 'ad_helper.dart';
 import 'package:destinigo_admin/services/local_notification_service.dart';
+import 'notofication.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key, required this.title, string}) : super(key: key);
@@ -17,57 +18,64 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
+  String deviceTokenToSendPushNotification = '';
   @override
   void initState() {
     super.initState();
-    LocalNotificationService.initialize(context);
+
 /* Terminate app show notification */
     FirebaseMessaging.instance.getInitialMessage().then(
-          (message) {
-        print("FirebaseMessaging.instance.getInitialMessage");
+      (message) {
+        //  print("FirebaseMessaging.instance.getInitialMessage");
         if (message != null) {
-          print("New Notification");
-          // if (message.data['_id'] != null) {
-          //   Navigator.of(context).push(
-          //     MaterialPageRoute(
-          //       builder: (context) => DemoScreen(
-          //         id: message.data['_id'],
-          //       ),
-          //     ),
-          //   );
-          // }
+          //      print("New Notification");
+          if (message.data['_id'] != null) {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => Notify(
+                  id: message.data['_id'],
+                ),
+              ),
+            );
+          }
         }
       },
     );
 
     /* App opened show notification */
     FirebaseMessaging.onMessage.listen(
-          (message) {
-        print("FirebaseMessaging.onMessage.listen");
+      (message) {
+        // print("FirebaseMessaging.onMessage.listen");
         if (message.notification != null) {
-          print(message.notification!.title);
-          print(message.notification!.body);
-          print("message.data11 ${message.data}");
-        //  LocalNotificationService.createanddisplaynotification(message);
+          // print(message.notification!.title);
+          // print(message.notification!.body);
+          //  print("message.data11 ${message.data}");
+          LocalNotificationService.display(message);
         }
       },
     );
 
     /* App is in Background show notoficaton */
     FirebaseMessaging.onMessageOpenedApp.listen(
-          (message) {
-        print("FirebaseMessaging.onMessageOpenedApp.listen");
+      (message) {
+        //   print("FirebaseMessaging.onMessageOpenedApp.listen");
         if (message.notification != null) {
-          print(message.notification!.title);
-          print(message.notification!.body);
-          print("message.data22 ${message.data['_id']}");
+          //  print(message.notification!.title);
+          //  print(message.notification!.body);
+          //  print("message.data22 ${message.data['_id']}");
         }
       },
     );
-
   }
-    // ignore: unused_element
+
+  Future<void> getDeviceTokenToSendNotification() async {
+    final FirebaseMessaging _fcm = FirebaseMessaging.instance;
+    final token = await _fcm.getToken();
+    deviceTokenToSendPushNotification = token.toString();
+    print("Token Value $deviceTokenToSendPushNotification");
+  }
+
+  // ignore: unused_element
   Future<InitializationStatus> _initGoogleMobileAds() {
     return MobileAds.instance.initialize();
   }
@@ -99,6 +107,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    getDeviceTokenToSendNotification();
     return Material(
       child: Container(
           width: MediaQuery.of(context).size.width,

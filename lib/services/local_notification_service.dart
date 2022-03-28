@@ -1,59 +1,44 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class LocalNotificationService {
   static final FlutterLocalNotificationsPlugin _notificationsPlugin =
-  FlutterLocalNotificationsPlugin();
+      FlutterLocalNotificationsPlugin();
 
-  static void initialize(BuildContext context) {
-    // initializationSettings for Android
+  static void initialize() {
     const InitializationSettings initializationSettings =
-    InitializationSettings(
-      android: AndroidInitializationSettings("@mipmap/ic_launcher"),
-    );
+        InitializationSettings(
+            android: AndroidInitializationSettings("ic_launcher"));
 
-   /* _notificationsPlugin.initialize(initializationSettings,
-        onSelectNotification: (String route) async {
-          print("onSelectNotification");
-          if (route.isNotEmpty) {
-            Navigator.of(context).pushNamed(route);
-            print("Router Value: $route");
-            //////// DemoScreen in case of Foreground Message ///////////////////
-            // Navigator.of(context).push(
-            //   MaterialPageRoute(builder: (context) => DemoScreen(id: id)),
-            // );
-            ////////////////////////////////////////////////////////////////////
-          }
-        });*/
+    _notificationsPlugin.initialize(initializationSettings,
+        onSelectNotification: (String? id) async {
+      print("onSelectNotification");
+      if (id != null) {
+        print("Router Value1234 $id");
+      }
+    });
   }
 
-  static void createAndDisplayNotification(RemoteMessage message) async {
+//after initialize we create channel in createanddisplaynotification method
+  static void display(RemoteMessage message) async {
     try {
       final id = DateTime.now().millisecondsSinceEpoch ~/ 1000;
 
-      const NotificationDetails notificationDetails = NotificationDetails(
-        android: AndroidNotificationDetails(
-          // "com.example.flutter_push_notification_app",
-          "flutter_push_notification_app",
-          "flutter_push_notification_app",
-          importance: Importance.max,
-          priority: Priority.high,
-        ),
-      );
+      NotificationDetails notificationDetails = const NotificationDetails(
+          android: AndroidNotificationDetails(
+        "destinigo_admin",
+        "destinigo_admin",
+        // "this is our channel",
+        importance: Importance.max,
+        priority: Priority.high,
+      ));
 
-      /// pop up show
       await _notificationsPlugin.show(
         id,
-        message.notification?.title,
-        message.notification?.body,
+        message.notification!.title,
+        message.notification!.body,
         notificationDetails,
-        payload: message.data["route"],
-
-        //////// In case of DemoScreen //////////////////////////////////////
-        // this "id" key and "id" key of passing firebase's data must same
-        // payload: message.data["_id"],
-        ////////////////////////////////////////////////////////////////////
+        payload: message.data["_id"],
       );
     } on Exception catch (e) {
       print(e);

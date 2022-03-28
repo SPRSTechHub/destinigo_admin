@@ -36,7 +36,6 @@ class _ShareScreenWPState extends State<ShareScreenWP> {
           });
         },
         onAdFailedToLoad: (ad, err) {
-          // print('Failed to load a banner ad: ${err.message}');
           _isBannerAdReady = false;
           ad.dispose();
         },
